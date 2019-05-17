@@ -48,7 +48,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", report)
-	fmt.Println(report.TotalDuration() / 3600000.0)
-	fmt.Println(report.TotalGrand / 3600000.0)
+	hoursWorked := otcalc.HoursWorked(report.TotalGrand)
+
+	businessDays := otcalc.BusinessDays(timeSince, timeUntil)
+	hoursShouldWork := otcalc.HoursShouldWork(businessDays)
+	hoursOvertime := otcalc.HoursOvertime(hoursWorked, hoursShouldWork)
+
+	fmt.Printf("Businessdays between %s and %s: %d\n", timeSince.Format(toggl.TimeFormat), timeUntil.Format(toggl.TimeFormat), businessDays)
+
+	fmt.Printf("Hours worked: %.2f\n", hoursWorked)
+	fmt.Printf("Hours a normal person would work: %.2f\n", hoursShouldWork)
+	fmt.Printf("Hours Overtime: %.2f\n", hoursOvertime)
+
 }
