@@ -11,14 +11,29 @@ import (
 )
 
 const holidaysUrl string = "https://webapi.no/api/v1/holidays/"
+const webApiTimeFormat = "2006-01-02"
+
+type Time struct {
+	time.Time
+}
+
+func (t *Time) UnmarshalJSON(b []byte) error {
+	newTime, err := time.Parse(webApiTimeFormat, string(b[1:11]))
+	if err != nil {
+		return err
+	}
+
+	*t = Time{newTime}
+	return nil
+}
 
 type Holidays struct {
 	Data []Holiday `json:"data"`
 }
 
 type Holiday struct {
-	Date        time.Time `json:"date"`
-	Description string    `json:"description"`
+	Date        Time   `json:"date"`
+	Description string `json:"description"`
 }
 
 func NewHolidays(year int) (*Holidays, error) {
