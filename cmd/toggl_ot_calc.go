@@ -4,23 +4,40 @@ import (
 	"fmt"
 	"log"
 	"time"
+	"toggl-overtime-calculator/internal/pkg/config"
+	"toggl-overtime-calculator/pkg/otcalc"
 	"toggl-overtime-calculator/pkg/toggl"
 )
 
 func main() {
-	timeUntil, err := time.Parse(toggl.TimeFormat, "2019-04-30")
+	err := config.C.Init()
 	if err != nil {
-		log.Fatal("Unable to create timeUntil")
+		log.Fatal(err)
 	}
 
-	timeSince, err := time.Parse(toggl.TimeFormat, "2019-04-01")
+	until := config.C.Options.Until
+	if until == "" {
+		log.Fatal("Missing date until (use --until)")
+	}
+
+	since := config.C.Options.Since
+	if since == "" {
+		log.Fatal("Missing date since (use --since)")
+	}
+
+	timeUntil, err := time.Parse(toggl.TimeFormat, until)
 	if err != nil {
-		log.Fatal("Unable to create timeUntil")
+		log.Fatal("Unable to create timeUntil use date format yyyy-mm-dd")
+	}
+
+	timeSince, err := time.Parse(toggl.TimeFormat, since)
+	if err != nil {
+		log.Fatal("Unable to create timeSince use date format yyyy-mm-dd")
 	}
 
 	request := toggl.ReportRequest{
 		UserAgent:   "toggle-overtime-calculator",
-		WorkspaceId: 1,
+		WorkspaceId: config.C.Toggl.WorkspaceId,
 		Until:       timeUntil,
 		Since:       timeSince,
 		Page:        1,

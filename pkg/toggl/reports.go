@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"strconv"
 	"time"
+	"toggl-overtime-calculator/internal/pkg/config"
 )
 
 const TimeFormat = "2006-01-02"
@@ -96,7 +97,7 @@ func NewDetailReport(reportRequest ReportRequest) (*DetailReport, error) {
 		log.Fatal(err)
 	}
 
-	request.SetBasicAuth("some-token", "api_token")
+	request.SetBasicAuth(config.C.Toggl.ApiToken, "api_token")
 
 	client := &http.Client{}
 
