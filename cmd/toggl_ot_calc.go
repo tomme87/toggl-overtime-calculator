@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/tomme87/toggl-overtime-calculator/internal/pkg/config"
+	"github.com/tomme87/toggl-overtime-calculator/pkg/otcalc"
+	"github.com/tomme87/toggl-overtime-calculator/pkg/toggl"
 	"log"
 	"time"
-	"toggl-overtime-calculator/internal/pkg/config"
-	"toggl-overtime-calculator/pkg/otcalc"
-	"toggl-overtime-calculator/pkg/toggl"
 )
 
 func main() {
@@ -51,7 +51,7 @@ func main() {
 	hoursWorked := otcalc.HoursWorked(report.TotalGrand)
 
 	businessDays := otcalc.BusinessDays(timeSince, timeUntil)
-	hoursShouldWork := otcalc.HoursShouldWork(businessDays)
+	hoursShouldWork := otcalc.HoursShouldWork(businessDays, timeSince, timeUntil)
 	hoursOvertime := otcalc.HoursOvertime(hoursWorked, hoursShouldWork)
 
 	fmt.Printf("Businessdays between %s and %s: %d\n", timeSince.Format(toggl.TimeFormat), timeUntil.Format(toggl.TimeFormat), businessDays)

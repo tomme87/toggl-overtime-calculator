@@ -3,13 +3,13 @@ package toggl
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/tomme87/toggl-overtime-calculator/internal/pkg/config"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
 	"strconv"
 	"time"
-	"toggl-overtime-calculator/internal/pkg/config"
 )
 
 const TimeFormat = "2006-01-02"

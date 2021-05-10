@@ -17,9 +17,12 @@ type options struct {
 	Until string `mapstructure:"until"`
 }
 
+type specialDays map[string]float32
+
 type config struct {
-	Toggl   toggl   `mapstructure:"toggl"`
-	Options options `mapstructure:"options"`
+	Toggl       toggl       `mapstructure:"toggl"`
+	Options     options     `mapstructure:"options"`
+	SpecialDays specialDays `mapstructure:"specialDays"`
 }
 
 var C config

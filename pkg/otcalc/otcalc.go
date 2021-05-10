@@ -1,9 +1,11 @@
 package otcalc
 
 import (
+	"github.com/tomme87/toggl-overtime-calculator/internal/pkg/config"
+	"github.com/tomme87/toggl-overtime-calculator/pkg/toggl"
+	"github.com/tomme87/toggl-overtime-calculator/pkg/webapi_no"
 	"log"
 	"time"
-	"toggl-overtime-calculator/pkg/webapi_no"
 )
 
 func HoursOvertime(hoursWorked float32, hoursShouldWork float32) float32 {
@@ -14,8 +16,20 @@ func HoursWorked(msWorked int) float32 {
 	return float32(msWorked) / 3600000.0
 }
 
-func HoursShouldWork(businessDays int) float32 {
-	return float32(businessDays) * 7.5
+func HoursShouldWork(businessDays int, since time.Time, until time.Time) float32 {
+	correctHours := float32(0.0)
+	for key, val := range config.C.SpecialDays {
+		keyTime, err := time.Parse(toggl.TimeFormat, key)
+		if err != nil {
+			log.Fatalf("%s is not a valid dateTime", key)
+		}
+
+		if (keyTime.After(since) && keyTime.Before(until)) || keyTime.Equal(since) || keyTime.Equal(until) {
+			correctHours += val
+		}
+	}
+
+	return (float32(businessDays) * 7.5) + correctHours
 }
 
 func BusinessDays(since time.Time, until time.Time) int {
