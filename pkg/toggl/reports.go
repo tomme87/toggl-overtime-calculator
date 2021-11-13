@@ -14,7 +14,7 @@ import (
 
 const TimeFormat = "2006-01-02"
 
-const detailedReportUrl = "https://toggl.com/reports/api/v2/details"
+const detailedReportUrl = "https://api.track.toggl.com/reports/api/v2/details"
 
 type ReportRequest struct {
 	UserAgent   string
